@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crate Crawler</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Font: Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            crateBlue: '#1A00FF',
+          },
+          fontFamily: {
+            display: ['Quicksand', '"Comic Sans MS"', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            pill: '9999px',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        sans-serif;
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-white">
+  <main class="w-full flex items-center justify-center px-4">
+    <section
+      class="flex flex-col items-center text-center"
+      style="max-width: 340px;"
+    >
+      <!-- Logo -->
+      <img
+        src="https://drive.google.com/uc?export=view&id=1UcIrDbi9MWrLrzxOoqVBlStr4pQFjgxY"
+        alt="Crate Crawler logo"
+        class="mb-4 w-20 h-20 object-contain"
+      />
+
+      <!-- Heading -->
+      <h1
+        class="font-display font-bold text-3xl md:text-4xl text-crateBlue mb-2 tracking-tight"
+      >
+        Crate Crawler
+      </h1>
+
+      <!-- Description -->
+      <p
+        class="text-xs text-crateBlue max-w-xs mb-8"
+        style="line-height: 1.35;"
+      >
+        Find a page on Discogs, filter it down, copy the URL, &amp; get a
+        youtube playlist sent to you with all the songs across the first 100
+        releases
+      </p>
+
+      <!-- Form -->
+      <form id="crawler-form" class="w-full flex flex-col gap-4">
+        <!-- Email -->
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          placeholder="Email"
+          class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none focus:ring-2 focus:ring-crateBlue/60 text-sm placeholder:text-crateBlue/50 bg-white"
+        />
+
+        <!-- Discogs URL -->
+        <input
+          id="discogs-url"
+          name="discogsUrl"
+          type="url"
+          required
+          placeholder="Discogs URL"
+          class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none focus:ring-2 focus:ring-crateBlue/60 text-sm placeholder:text-crateBlue/50 bg-white"
+        />
+
+        <!-- Submit button -->
+        <button
+          id="submit-btn"
+          type="submit"
+          class="w-full mt-2 py-3 rounded-pill bg-crateBlue text-white font-semibold text-sm tracking-wide hover:bg-crateBlue/90 active:bg-crateBlue/80 transition disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          SUBMIT
+        </button>
+
+        <!-- Error message -->
+        <p
+          id="error-msg"
+          class="mt-1 text-xs text-red-500 hidden"
+        >
+          Something went wrong. Please try again.
+        </p>
+      </form>
+
+      <!-- Success message -->
+      <div
+        id="success-msg"
+        class="hidden mt-6 text-sm text-crateBlue"
+      >
+        <p class="font-semibold">
+          Check your inbox! The playlist is on its way.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // TODO: Replace this with your actual n8n webhook URL
+    const N8N_WEBHOOK_URL = 'https://YOUR_N8N_INSTANCE/webhook/your-workflow-id';
+
+    const form = document.getElementById('crawler-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMsg = document.getElementById('error-msg');
+    const successMsg = document.getElementById('success-msg');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorMsg.classList.add('hidden');
+
+      const email = document.getElementById('email').value.trim();
+      const discogsUrl = document.getElementById('discogs-url').value.trim();
+
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'CRAWLING...';
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            discogsUrl,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+      } catch (e) {
+        errorMsg.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  </script>
+</body>
+</html>
