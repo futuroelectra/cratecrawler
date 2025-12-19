@@ -142,7 +142,7 @@
       submitBtn.disabled = true;
       submitBtn.textContent = 'CRAWLING...';
 
-      try {
+try {
         const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
           headers: {
@@ -154,12 +154,19 @@
           }),
         });
 
-        if (!response.ok) {
+        const data = await response.json();
+
+  console.log("FULL DATA FROM N8N:", data);
+  
+        // Check if the response contains the authUrl from n8n
+        if (data.authUrl) {
+          window.location.href = data.authUrl; // Redirect to Google Login
+        } else if (response.ok) {
+          form.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+        } else {
           throw new Error('Request failed');
         }
-
-        form.classList.add('hidden');
-        successMsg.classList.remove('hidden');
       } catch (e) {
         errorMsg.classList.remove('hidden');
         submitBtn.disabled = false;
