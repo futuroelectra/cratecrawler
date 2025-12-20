@@ -173,6 +173,15 @@ try {
         submitBtn.textContent = originalText;
       }
     });
+
+    // Check for "status=success" in the URL when the page loads
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('status') === 'success') {
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+    }
+});
   </script>
 </body>
 </html>
