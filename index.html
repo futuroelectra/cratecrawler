@@ -9,178 +9,64 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            crateBlue: '#1A00FF',
-          },
-          fontFamily: {
-            display: ['Quicksand', '"Comic Sans MS"', 'system-ui', 'sans-serif'],
-          },
-          borderRadius: {
-            pill: '9999px',
-          },
+          colors: { crateBlue: '#1A00FF' },
+          fontFamily: { display: ['Quicksand', 'sans-serif'] },
+          borderRadius: { pill: '9999px' },
         },
       },
     };
   </script>
-
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        sans-serif;
-      background-color: #ffffff;
-    }
-    /* Hide the default arrow on some browsers for a cleaner look */
-    details summary::-webkit-details-marker {
-      display:none;
-    }
-    details summary {
-      list-style: none;
-    }
-  </style>
 </head>
 <body class="min-h-screen flex items-center justify-center bg-white">
   <main class="w-full flex items-center justify-center px-4">
-    <section
-      class="flex flex-col items-center text-center"
-      style="max-width: 340px;"
-    >
-      <img 
-        src="logo.png" 
-        alt="Crate Crawler logo" 
-        class="mb-4 w-20 h-20 object-contain" />
-
-      <h1
-        class="font-display font-bold text-3xl md:text-4xl text-crateBlue mb-2 tracking-tight"
-      >
-        Crate Crawler
-      </h1>
-
-      <p
-        class="text-xs text-crateBlue max-w-xs mb-8"
-        style="line-height: 1.35;"
-      >
-        Find a page on Discogs, filter it down, copy the URL, &amp; get a
-        youtube playlist sent to you with all the songs across the first 100
-        releases
+    <section class="flex flex-col items-center text-center" style="max-width: 340px;">
+      <img src="logo.png" alt="Crate Crawler logo" class="mb-4 w-20 h-20 object-contain" />
+      <h1 class="font-display font-bold text-3xl md:text-4xl text-crateBlue mb-2 tracking-tight">Crate Crawler</h1>
+      <p class="text-xs text-crateBlue max-w-xs mb-8" style="line-height: 1.35;">
+        Find a page on Discogs, filter it down, copy the URL, &amp; get a youtube playlist sent to you.
       </p>
 
       <form id="crawler-form" class="w-full flex flex-col gap-4">
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder="Email"
-          class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none focus:ring-2 focus:ring-crateBlue/60 text-sm placeholder:text-crateBlue/50 bg-white"
-        />
-
-        <input
-          id="discogs-url"
-          name="discogsUrl"
-          type="url"
-          required
-          placeholder="Discogs URL"
-          class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none focus:ring-2 focus:ring-crateBlue/60 text-sm placeholder:text-crateBlue/50 bg-white"
-        />
-
-        <button
-          id="submit-btn"
-          type="submit"
-          class="w-full mt-2 py-3 rounded-pill bg-crateBlue text-white font-semibold text-sm tracking-wide hover:bg-crateBlue/90 active:bg-crateBlue/80 transition disabled:opacity-60 disabled:cursor-not-allowed"
-        >
+        <input id="email" type="email" required placeholder="Email" class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none text-sm placeholder:text-crateBlue/50 bg-white" />
+        <input id="discogs-url" type="url" required placeholder="Discogs URL" class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none text-sm placeholder:text-crateBlue/50 bg-white" />
+        
+        <button id="submit-btn" type="submit" class="w-full mt-2 py-3 rounded-pill bg-crateBlue text-white font-semibold text-sm tracking-wide hover:bg-crateBlue/90 transition disabled:opacity-60">
           SUBMIT
         </button>
 
-        <details class="group">
-          <summary class="text-[10px] text-crateBlue/70 cursor-pointer hover:text-crateBlue transition-colors font-medium">
-            Privacy Policy
-          </summary>
-          <div class="mt-4 p-4 text-left text-[10px] text-crateBlue/80 border border-crateBlue/20 rounded-lg bg-gray-50 max-h-60 overflow-y-auto leading-relaxed">
-            <p class="font-bold mb-2 text-xs">Privacy Policy</p>
-            <p class="mb-2 italic">Last Updated: December 22, 2025</p>
-            <p class="mb-4">Crate Crawler ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we handle your information when you use our website and YouTube playlist creation services.</p>
-            
-            <p class="font-bold">1. Information We Collect</p>
-            <p class="mb-2">Crate Crawler only collects the information necessary to provide our service:</p>
-            <ul class="list-disc ml-4 mb-4">
-              <li><strong>Email Address:</strong> We collect the email address you provide in our form to send you a confirmation link once your playlist has been successfully created.</li>
-              <li><strong>YouTube Data:</strong> We use Google OAuth to request access to your YouTube account. Our application specifically uses the youtube.force-ssl (or playlist.modify) scope.</li>
-            </ul>
+        <a href="/privacy" class="text-[10px] text-crateBlue/60 hover:text-crateBlue underline transition-colors">
+          Privacy Policy
+        </a>
 
-            <p class="font-bold">2. How We Use Your Data</p>
-            <p class="mb-2">We use the YouTube API to:</p>
-            <ul class="list-disc ml-4 mb-4">
-              <li>Create a new, private or unlisted playlist on your YouTube account.</li>
-              <li>Search for and add tracks based on the Discogs URL you provided.</li>
-            </ul>
-            <p class="mb-4 text-gray-600">We do not access, read, or delete your existing playlists, search history, or personal YouTube data.</p>
-
-            <p class="font-bold">3. Data Retention and Security</p>
-            <ul class="list-disc ml-4 mb-4">
-              <li><strong>No Permanent Storage:</strong> We do not store your YouTube access tokens or Discogs data after your request is processed.</li>
-              <li><strong>Authentication:</strong> We never see or store your Google password. Authentication is handled entirely by Google’s secure servers.</li>
-              <li><strong>Third-Party Disclosure:</strong> We do not sell, trade, or otherwise transfer your personal information to outside parties.</li>
-            </ul>
-
-            <p class="font-bold">4. Third-Party Links and Terms</p>
-            <p class="mb-2">Our service relies on YouTube API Services. By using Crate Crawler, you are agreeing to be bound by the following:</p>
-            <ul class="list-disc ml-4 mb-4">
-              <li><a href="https://www.youtube.com/t/terms" target="_blank" class="underline">YouTube Terms of Service</a></li>
-              <li><a href="https://policies.google.com/privacy" target="_blank" class="underline">Google Privacy Policy</a></li>
-            </ul>
-
-            <p class="font-bold">5. Revoking Access</p>
-            <p class="mb-4">You may revoke Crate Crawler’s access to your data at any time via the Google Security Settings page.</p>
-
-            <p class="font-bold">6. Contact Us</p>
-            <p>If you have any questions regarding this privacy policy, you may contact us at: cratecrawler.com@gmail.com</p>
-          </div>
-        </details>
-
-        <p
-          id="error-msg"
-          class="mt-1 text-xs text-red-500 hidden"
-        >
-          Something went wrong. Please try again.
-        </p>
+        <p id="error-msg" class="mt-1 text-xs text-red-500 hidden">Something went wrong. Please try again.</p>
       </form>
 
-      <div
-        id="success-msg"
-        class="hidden mt-6 text-sm text-crateBlue"
-      >
-        <p class="font-semibold">
-          Check your inbox! The playlist is on its way.
-        </p>
+      <div id="success-msg" class="hidden mt-6 text-sm text-crateBlue">
+        <p class="font-semibold">Check your inbox! The playlist is on its way.</p>
       </div>
     </section>
   </main>
 
   <script>
     const N8N_WEBHOOK_URL = 'https://connorjoejoseph.app.n8n.cloud/webhook/069cd45c-2f92-49a9-b8ad-457428c3ce7b';
-
     const form = document.getElementById('crawler-form');
     const submitBtn = document.getElementById('submit-btn');
     const errorMsg = document.getElementById('error-msg');
     const successMsg = document.getElementById('success-msg');
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
       errorMsg.classList.add('hidden');
-
       const email = document.getElementById('email').value.trim();
       const discogsUrl = document.getElementById('discogs-url').value.trim();
-
+      
       const originalText = submitBtn.textContent;
       submitBtn.disabled = true;
       submitBtn.textContent = 'CRAWLING...';
@@ -188,24 +74,17 @@
       try {
         const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email,
-            discogsUrl,
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, discogsUrl }),
         });
-
         const data = await response.json();
-
         if (data.authUrl) {
-          window.location.href = data.authUrl; 
+          window.location.href = data.authUrl;
         } else if (response.ok) {
           form.classList.add('hidden');
           successMsg.classList.remove('hidden');
         } else {
-          throw new Error('Request failed');
+          throw new Error();
         }
       } catch (e) {
         errorMsg.classList.remove('hidden');
@@ -215,10 +94,9 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('status') === 'success') {
-          form.classList.add('hidden');
-          successMsg.classList.remove('hidden');
+      if (new URLSearchParams(window.location.search).get('status') === 'success') {
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
       }
     });
   </script>
