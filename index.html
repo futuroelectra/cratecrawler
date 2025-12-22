@@ -44,7 +44,7 @@
 <body class="min-h-screen flex items-center justify-center bg-white">
   <main class="w-full flex items-center justify-center px-4">
     <section
-      class="flex flex-col items-center text-center"
+      class="flex flex-col items-center text-center w-full"
       style="max-width: 340px;"
     >
       <img 
@@ -74,4 +74,109 @@
           type="email"
           required
           placeholder="Email"
-          class="w-full px-
+          class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none focus:ring-2 focus:ring-crateBlue/60 text-sm placeholder:text-crateBlue/50 bg-white"
+        />
+
+        <input
+          id="discogs-url"
+          name="discogsUrl"
+          type="url"
+          required
+          placeholder="Discogs URL"
+          class="w-full px-4 py-3 rounded-pill border-[3px] border-crateBlue focus:outline-none focus:ring-2 focus:ring-crateBlue/60 text-sm placeholder:text-crateBlue/50 bg-white"
+        />
+
+        <button
+          id="submit-btn"
+          type="submit"
+          class="w-full mt-2 py-3 rounded-pill bg-crateBlue text-white font-semibold text-sm tracking-wide hover:bg-crateBlue/90 active:bg-crateBlue/80 transition disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          SUBMIT
+        </button>
+
+        <div class="flex justify-center mt-2">
+            <a 
+              href="/privacy" 
+              class="px-4 py-1.5 rounded-pill border border-crateBlue/30 text-[10px] text-crateBlue/70 font-semibold tracking-wider hover:bg-crateBlue/5 hover:text-crateBlue transition-all"
+            >
+              PRIVACY POLICY
+            </a>
+        </div>
+
+        <p
+          id="error-msg"
+          class="mt-1 text-xs text-red-500 hidden"
+        >
+          Something went wrong. Please try again.
+        </p>
+      </form>
+
+      <div
+        id="success-msg"
+        class="hidden mt-6 text-sm text-crateBlue"
+      >
+        <p class="font-semibold">
+          Check your inbox! The playlist is on its way.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const N8N_WEBHOOK_URL = 'https://connorjoejoseph.app.n8n.cloud/webhook/069cd45c-2f92-49a9-b8ad-457428c3ce7b';
+
+    const form = document.getElementById('crawler-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMsg = document.getElementById('error-msg');
+    const successMsg = document.getElementById('success-msg');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorMsg.classList.add('hidden');
+
+      const email = document.getElementById('email').value.trim();
+      const discogsUrl = document.getElementById('discogs-url').value.trim();
+
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'CRAWLING...';
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            discogsUrl,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.authUrl) {
+          window.location.href = data.authUrl; 
+        } else if (response.ok) {
+          form.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+        } else {
+          throw new Error('Request failed');
+        }
+      } catch (e) {
+        errorMsg.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('status') === 'success') {
+          form.classList.add('hidden');
+          successMsg.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
